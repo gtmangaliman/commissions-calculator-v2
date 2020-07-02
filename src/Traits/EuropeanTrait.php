@@ -26,18 +26,18 @@ trait EuropeanTrait
 
   public function getNonEuropeanAmount(string $amount, string $exchangeRate) : string
   {
-  	  return bcdiv($amount, $exchangeRate);
+  	  return (string)($amount/$exchangeRate);
   }
 
   public function getAmountWithCommission(string $total, bool $europeanIssuedCard) : string
   {
   	  if ($europeanIssuedCard) {
-  	  	  $amount = bcmul($total, CommissionRates::EUROPEAN, 4);
+  	  	  $amount = ($total*CommissionRates::EUROPEAN);
   	  } else {
-  	  	  $amount = bcmul($total, CommissionRates::NON_EUROPEAN, 4);
+  	  	  $amount = ($total*CommissionRates::NON_EUROPEAN);
   	  }
 
-  	  return $amount;
+  	  return (string)$amount;
   }
 
 }

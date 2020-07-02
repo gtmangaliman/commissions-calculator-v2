@@ -16,7 +16,7 @@ class CalculateCommissionsService
     {
     	$currency = $transaction->getCurrency();
     	$europeanIssuedCard = $this->europeanIssuedCard($cardMetaData->getCountryCode());
-    	$exchangeRate = isset($exchangeRates[$currency]) ? $exchangeRates[$currency] : 0;
+    	$exchangeRate = isset($exchangeRates[$currency]) ? $exchangeRates[$currency] : '0';
 
     	$total = $this->total($transaction->getAmount(), $currency, (string)$exchangeRate);
 		$commission = $this->getAmountWithCommission($total, $europeanIssuedCard);
@@ -26,7 +26,7 @@ class CalculateCommissionsService
 
     public function total(string $amount, string $currency, string $exchangeRate) : string
     {
-    	if ($exchangeRate == 0) {
+    	if ($exchangeRate === '0') {
 			if ($this->isEuropeanCurrency($currency)) {
 				$total = $this->getEuropeanAmount($amount);
 			}

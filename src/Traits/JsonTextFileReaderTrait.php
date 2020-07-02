@@ -8,6 +8,6 @@ trait JsonTextFileReaderTrait
 {
 	public function withValidExtension(string $extension) : bool
     {
-    	return ($extension == 'txt') ? true : false;
+    	return ($extension === 'txt') ? true : false;
     }
 }
