@@ -51,32 +51,32 @@ class CalculateCommissionsTest extends TestCase
     public function dataProviderForTestTotal() : array
     {
     	$exchangeRates =  [
-						    "JPY" => 120.25,
-						    "GBP" => 0.90133,
+						    "JPY" => 121.24,
+						    "GBP" => 0.90225,
 						];
     	return [
     		'with exhange rate' => [
     			'amount' => '2000.00',
     			'currency' => 'GBP',
-    			'exchangeRate' => '0.90225',
+    			'exchangeRate' => $exchangeRates['GBP'],
     			'expected' => '2216.6805209199'
     		],
     		'with zero exhange rate' => [
     			'amount' => '100.00',
     			'currency' => 'EUR',
-    			'exchangeRate' => '0',
+    			'exchangeRate' => ($exchangeRates['EUR'])?:'0',
     			'expected' => '100.00'
     		],
     		'with european currency' => [
     			'amount' => '100.00',
     			'currency' => 'EUR',
-    			'exchangeRate' => '0',
+    			'exchangeRate' => ($exchangeRates['EUR'])?:'0',
     			'expected' => '100.00'
     		],
     		'with non european currency' => [
     			'amount' => '10000.00',
     			'currency' => 'JPY',
-    			'exchangeRate' => '121.24',
+    			'exchangeRate' => $exchangeRates['JPY'],
     			'expected' => '82.481029363246'
     		]
     	];
