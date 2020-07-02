@@ -12,12 +12,13 @@ use Gtmangaliman\CommissionCalculator\Services\CalculateCommissionsService;
 use Gtmangaliman\CommissionCalculator\Services\CardMetaDataService;
 use Gtmangaliman\CommissionCalculator\Model\Transaction;
 use Gtmangaliman\CommissionCalculator\Model\CardMetaData;
+use Gtmangaliman\CommissionCalculator\Exceptions\FileNotFoundException;
+use Gtmangaliman\CommissionCalculator\Exceptions\TransactionException;
 
 if (isset($argv)) {
 	try {
 		if (!isset($argv[1])) {
-        	echo 'no file found'; //add exception for this
-        	exit();
+        	throw new FileNotFoundException;
         }
 
         $reader = new JsonTextFileReaderService();
@@ -30,6 +31,12 @@ if (isset($argv)) {
         //add error when url can't be read
     	$exchangeRateService = new ExchangeRateService(new HttpClientService());
     	$exchangeRates = $exchangeRateService->rates();
+
+    	$parsedData = $parser->parse($data);
+
+    	if (empty($parsedData)) {
+    		throw new TransactionException('Transactions not found. Kindly check '.$file);
+    	}
 
     	foreach ($parser->parse($data) as $item) {
     		if ($item) {

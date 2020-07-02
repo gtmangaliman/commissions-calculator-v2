@@ -16,7 +16,7 @@
 ```
 > php app.php transactions.txt
 ```
-Note: First parameter would be the file name where the transactions are located.
+Note: Second parameter would be the file name where the transactions are located.
 
 ## Run this command to test executions
 ```

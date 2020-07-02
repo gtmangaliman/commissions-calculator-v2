@@ -5,6 +5,7 @@ namespace Gtmangaliman\CommissionCalculator\Services;
 use Gtmangaliman\CommissionCalculator\Contracts\ClientInterface;
 use Gtmangaliman\CommissionCalculator\Model\Transaction;
 use Gtmangaliman\CommissionCalculator\Config\Api;
+use Gtmangaliman\CommissionCalculator\Exceptions\CardMetaDataServiceException;
 
 class CardMetaDataService
 {
@@ -19,6 +20,10 @@ class CardMetaDataService
 
     public function countryCode() : string
     {
+    	if (!isset($this->data['country']) && !isset($this->data['country']['alpha2'])) {
+    		throw new CardMetaDataServiceException('Card Meta Data\'s Country Code not found.');
+    	}
+
     	return $this->data['country']['alpha2'];
     }
 }

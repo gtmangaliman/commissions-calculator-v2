@@ -5,6 +5,7 @@ namespace Gtmangaliman\CommissionCalculator\Services;
 
 use Gtmangaliman\CommissionCalculator\Contracts\ReaderInterface;
 use Gtmangaliman\CommissionCalculator\Traits\JsonTextFileReaderTrait;
+use Gtmangaliman\CommissionCalculator\Exceptions\JsonTextFileReaderException;
 
 class JsonTextFileReaderService implements ReaderInterface
 {
@@ -17,7 +18,7 @@ class JsonTextFileReaderService implements ReaderInterface
     	if ($this->withValidExtension($ext) && file_exists($file)) {
     		return file_get_contents($file);
     	} else {
-    		throw new \Gtmangaliman\CommissionCalculator\Exceptions\JsonTextFileReaderException();
+    		throw new JsonTextFileReaderException;
     	}
     }
 }

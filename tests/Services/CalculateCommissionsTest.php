@@ -10,13 +10,6 @@ use Gtmangaliman\CommissionCalculator\Model\CardMetaData;
 
 class CalculateCommissionsTest extends TestCase
 {
-	private $client;
-
-	public function setUp() : void
-	{
-
-	}
-
 	/**
 	 * *
 	 * @param string $transactionData
@@ -26,13 +19,8 @@ class CalculateCommissionsTest extends TestCase
      *
      * @dataProvider dataProviderForTestCalculateCommissions
      */
-    public function testCalculateCommissions(array $transactionData, string $expected, array $exchangeRates, string $countryCode)
+    public function testCalculateCommissions(Transaction $transaction, string $expected, array $exchangeRates, string $countryCode)
     {
-    	$transaction = new Transaction();
-    	$transaction->setBin($transactionData['bin']);
-    	$transaction->setAmount($transactionData['amount']);
-    	$transaction->setCurrency($transactionData['currency']);
-
     	$cardMetaData = new CardMetaData();
     	$cardMetaData->setCountryCode($countryCode);
 
@@ -42,6 +30,11 @@ class CalculateCommissionsTest extends TestCase
 
     public function dataProviderForTestCalculateCommissions()
     {
+    	$transaction = new Transaction();
+    	$transaction->setBin('45717360');
+    	$transaction->setAmount('100.00');
+    	$transaction->setCurrency('EUR');
+
     	$exchangeRates = [
     						[
 							  "rates" => [
@@ -80,12 +73,6 @@ class CalculateCommissionsTest extends TestCase
 							  ]
 							]
 						];
-
-		$transaction = [
-			'bin' => '45717360',
-			'amount' => '100.00',
-			'currency' => 'EUR'
-		];
 
     	return [
     		[$transaction, '1.00', $exchangeRates, 'DK']
