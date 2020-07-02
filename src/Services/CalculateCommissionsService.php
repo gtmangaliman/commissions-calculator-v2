@@ -29,6 +29,7 @@ class CalculateCommissionsService
     public function total(string $amount, string $currency, string $exchangeRate) : ?string
     {
     	if ($exchangeRate === '0') {
+    		$total = $amount;
 			if ($this->isEuropeanCurrency($currency)) {
 				$total = $this->getEuropeanAmount($amount);
 			}

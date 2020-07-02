@@ -10,6 +10,13 @@ use Gtmangaliman\CommissionCalculator\Model\CardMetaData;
 
 class CalculateCommissionsTest extends TestCase
 {
+	private $calculateCommissions;
+
+	public function setUp() : void
+	{
+		$this->calculateCommissions = new CalculateCommissionsService();
+	}
+
 	/**
 	 * *
 	 * @param string $transactionData
@@ -24,12 +31,63 @@ class CalculateCommissionsTest extends TestCase
     	$cardMetaData = new CardMetaData();
     	$cardMetaData->setCountryCode($countryCode);
 
-    	$calculateCommissions = new CalculateCommissionsService();
-    	$this->assertSame($expected, $calculateCommissions->compute($transaction, $cardMetaData, $exchangeRates), 'Incorrect Commission Computation');
+    	$this->assertSame($expected, $this->calculateCommissions->compute($transaction, $cardMetaData, $exchangeRates), 'Incorrect Commission Computation');
+    }
+
+    /**
+	 * *
+	 * @param string $amount
+     * @param string $currency
+     * @param string $exchangeRates
+     * @param string $expected
+     *
+     * @dataProvider dataProviderForTestTotal
+     */
+    public function testTotal(string $amount, string $currency, string $exchangeRate, string $expected) : void
+    {
+    	$this->assertSame($expected, $this->calculateCommissions->total($amount, $currency, $exchangeRate), 'Incorrect computation of total');
+    }
+
+    public function dataProviderForTestTotal() : array
+    {
+    	$exchangeRates =  [
+						    "JPY" => 120.25,
+						    "GBP" => 0.90133,
+						];
+    	return [
+    		'with exhange rate' => [
+    			'amount' => '2000.00',
+    			'currency' => 'GBP',
+    			'exchangeRate' => '0.90225',
+    			'expected' => '2216.6805209199'
+    		],
+    		'with zero exhange rate' => [
+    			'amount' => '100.00',
+    			'currency' => 'EUR',
+    			'exchangeRate' => '0',
+    			'expected' => '100.00'
+    		],
+    		'with european currency' => [
+    			'amount' => '100.00',
+    			'currency' => 'EUR',
+    			'exchangeRate' => '0',
+    			'expected' => '100.00'
+    		],
+    		'with non european currency' => [
+    			'amount' => '10000.00',
+    			'currency' => 'JPY',
+    			'exchangeRate' => '121.24',
+    			'expected' => '82.481029363246'
+    		]
+    	];
     }
 
     public function dataProviderForTestCalculateCommissions() : array
     {
+    	$exchangeRates =  [
+							"USD" => 1.12
+						];
+
     	$eurTransaction = new Transaction();
     	$eurTransaction->setBin('45717360');
     	$eurTransaction->setAmount('100.00');
@@ -39,41 +97,6 @@ class CalculateCommissionsTest extends TestCase
     	$nonEurTransaction->setBin('516793');
     	$nonEurTransaction->setAmount('50.00');
     	$nonEurTransaction->setCurrency('USD');
-
-    	$exchangeRates = [
-						    "CAD" => 1.5282,
-						    "HKD" => 8.6805,
-						    "ISK" => 155.6,
-						    "PHP" => 56.075,
-						    "DKK" => 7.4534,
-						    "HUF" => 354.35,
-						    "CZK" => 26.796,
-						    "AUD" => 1.6321,
-						    "RON" => 4.842,
-						    "SEK" => 10.4865,
-						    "IDR" => 15988,
-						    "INR" => 84.712,
-						    "BRL" => 6.0012,
-						    "RUB" => 77.7516,
-						    "HRK" => 7.567,
-						    "JPY" => 120.25,
-						    "THB" => 34.647,
-						    "CHF" => 1.0637,
-						    "SGD" => 1.56,
-						    "PLN" => 4.4653,
-						    "BGN" => 1.9558,
-						    "TRY" => 7.6776,
-						    "CNY" => 7.9206,
-						    "NOK" => 10.8748,
-						    "NZD" => 1.7465,
-						    "ZAR" => 19.4883,
-						    "USD" => 1.12,
-						    "MXN" => 25.6315,
-						    "ILS" => 3.8545,
-						    "GBP" => 0.90133,
-						    "KRW" => 1347.73,
-						    "MYR" => 4.7914
-						];
 
     	return [
     		'European transaction' => [
