@@ -14,7 +14,7 @@ class HttpClientService implements ClientInterface
 		$pageDocument = @file_get_contents($url);
 
 		if ($pageDocument === false) {
-		    throw new HttpClientServiceException($url.' does not exist.');
+		    throw new HttpClientServiceException($url.' is inaccesible at the moment. Kindly check the url provided.');
 		}
 
 		$opts = [
