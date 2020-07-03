@@ -19,18 +19,15 @@ class CalculateCommissionsTest extends TestCase
 
 	/**
 	 * *
-	 * @param string $transactionData
+	 * @param object $transaction
      * @param string $expected
      * @param string $exchangeRates
-	 * @param string $countryCode
+	 * @param string $cardMetaData
      *
      * @dataProvider dataProviderForTestCalculateCommissions
      */
-    public function testCalculateCommissions(Transaction $transaction, string $expected, array $exchangeRates, string $countryCode) : void
+    public function testCalculateCommissions(Transaction $transaction, string $expected, array $exchangeRates, CardMetaData $cardMetaData) : void
     {
-    	$cardMetaData = new CardMetaData();
-    	$cardMetaData->setCountryCode($countryCode);
-
     	$this->assertSame($expected, $this->calculateCommissions->compute($transaction, $cardMetaData, $exchangeRates), 'Incorrect Commission Computation');
     }
 
@@ -64,13 +61,13 @@ class CalculateCommissionsTest extends TestCase
     		'with zero exhange rate' => [
     			'amount' => '100.00',
     			'currency' => 'EUR',
-    			'exchangeRate' => ($exchangeRates['EUR'])?:'0',
+    			'exchangeRate' => isset($exchangeRates['EUR'])?:'0',
     			'expected' => '100.00'
     		],
     		'with european currency' => [
     			'amount' => '100.00',
     			'currency' => 'EUR',
-    			'exchangeRate' => ($exchangeRates['EUR'])?:'0',
+    			'exchangeRate' => isset($exchangeRates['EUR'])?:'0',
     			'expected' => '100.00'
     		],
     		'with non european currency' => [
@@ -98,18 +95,24 @@ class CalculateCommissionsTest extends TestCase
     	$nonEurTransaction->setAmount('50.00');
     	$nonEurTransaction->setCurrency('USD');
 
+    	$eurCardMetaData = new CardMetaData();
+    	$eurCardMetaData->setCountryCode('DK');
+
+    	$nonEurCardMetaData = new CardMetaData();
+    	$nonEurCardMetaData->setCountryCode('LT');
+
     	return [
     		'European transaction' => [
     			'transaction' => $eurTransaction,
     			'expected' => '1.00',
     			'exchangeRates' => $exchangeRates,
-    			'countryCode' => 'DK'
+    			'cardMetaData' => $eurCardMetaData
     		],
     		'Non European transaction' => [
     			'transaction' => $nonEurTransaction,
     			'expected' => '0.45',
     			'exchangeRates' => $exchangeRates,
-    			'countryCode' => 'LT'
+    			'cardMetaData' => $nonEurCardMetaData
     		]
     	];
     }
