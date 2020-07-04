@@ -27,8 +27,6 @@ if (isset($argv)) {
         $file = $argv[1];
         $data = $reader->read($file);
 
-        //addJsonParse for return of read()
-        //add error when url can't be read
     	$exchangeRateService = new ExchangeRateService(new HttpClientService());
     	$exchangeRates = $exchangeRateService->rates();
 

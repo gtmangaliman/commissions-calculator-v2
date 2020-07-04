@@ -6,8 +6,5 @@ namespace Gtmangaliman\CommissionCalculator\Contracts;
 
 interface ClientInterface
 {
-  /**
-   * Reads file.
-   */
   public function get(string $file);
 }

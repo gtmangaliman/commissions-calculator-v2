@@ -17,7 +17,6 @@ class ExchangeRateService
 
     public function rates() : array
     {
-    	//check if rates are not avaialble
     	return isset($this->data['rates']) ? $this->data['rates'] : [];
     }
 }

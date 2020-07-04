@@ -51,6 +51,7 @@ class CalculateCommissionsTest extends TestCase
 						    "JPY" => 121.24,
 						    "GBP" => 0.90225,
 						];
+
     	return [
     		'with exhange rate' => [
     			'amount' => '2000.00',
