@@ -12,7 +12,7 @@ class JsonTextFileParserService implements ParserInterface
     public function parse(string $data) : array
     {
     	if (empty($data)) {
-    		throw new JsonTextFileParserException();
+    		throw new JsonTextFileParserException('Data to be parsed should not be empty.');
     	}
 
     	$data = explode("\n", $data);

@@ -9,21 +9,26 @@ use Gtmangaliman\CommissionCalculator\Exceptions\CardMetaDataServiceException;
 
 class CardMetaDataService
 {
-	public $data;
-
 	public $client;
 
-    public function __construct(ClientInterface $client, Transaction $transaction)
+    public function __construct(ClientInterface $client)
     {
-    	$this->data = $client->get(Api::BIN_LIST.$transaction->getBin());
+    	$this->client = $client;
     }
 
-    public function countryCode() : string
+    public function data(Transaction $transaction) : array
     {
-    	if (!isset($this->data['country']) && !isset($this->data['country']['alpha2'])) {
+    	return $this->client->get(Api::BIN_LIST.$transaction->getBin());
+    }
+
+    public function countryCode(Transaction $transaction) : string
+    {
+    	$metaData = $this->data($transaction);
+
+    	if (!isset($metaData['country']) && !isset($metaData['country']['alpha2'])) {
     		throw new CardMetaDataServiceException('Card Meta Data\'s Country Code not found.');
     	}
 
-    	return $this->data['country']['alpha2'];
+    	return $metaData['country']['alpha2'];
     }
 }

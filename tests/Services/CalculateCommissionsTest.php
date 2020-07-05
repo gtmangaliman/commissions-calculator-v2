@@ -42,7 +42,11 @@ class CalculateCommissionsTest extends TestCase
      */
     public function testTotal(string $amount, string $currency, string $exchangeRate, string $expected) : void
     {
-    	$this->assertSame($expected, $this->calculateCommissions->total($amount, $currency, $exchangeRate), 'Incorrect computation of total');
+    	$class = new \ReflectionClass('Gtmangaliman\CommissionCalculator\Services\CalculateCommissionsService');
+    	$method = $class->getMethod('total');
+    	$method->setAccessible(true);
+
+    	$this->assertSame($expected, $method->invokeArgs($this->calculateCommissions, [$amount, $currency, $exchangeRate]), 'Incorrect computation of total');
     }
 
     public function dataProviderForTestTotal() : array

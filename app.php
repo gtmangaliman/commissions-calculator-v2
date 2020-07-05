@@ -18,7 +18,7 @@ use Gtmangaliman\CommissionCalculator\Exceptions\TransactionException;
 if (isset($argv)) {
 	try {
 		if (!isset($argv[1])) {
-        	throw new FileNotFoundException;
+        	throw new FileNotFoundException('File not found. Please indicate the transactions filename as the second parameter.');
         }
 
         $reader = new JsonTextFileReaderService();
@@ -43,9 +43,9 @@ if (isset($argv)) {
 			    $transaction->setAmount($item['amount']);
 			    $transaction->setCurrency($item['currency']);
 
-			    $cardMetaDataService = new CardMetaDataService(new HttpClientService(), $transaction);
+			    $cardMetaDataService = new CardMetaDataService(new HttpClientService());
 			    $cardMetaData = new CardMetaData();
-			    $cardMetaData->setCountryCode($cardMetaDataService->countryCode());
+			    $cardMetaData->setCountryCode($cardMetaDataService->countryCode($transaction));
 
 			    $calculateCommissions = new CalculateCommissionsService();
 			    echo $calculateCommissions->compute($transaction, $cardMetaData, $exchangeRates)."\n";
@@ -54,6 +54,6 @@ if (isset($argv)) {
 
     } catch (Exception $e) {
         echo $e->getMessage();
-        exit;
+        exit();
     }
 }

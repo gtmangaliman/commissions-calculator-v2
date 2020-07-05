@@ -8,15 +8,22 @@ use Gtmangaliman\CommissionCalculator\Config\Api;
 
 class ExchangeRateService
 {
-	public $data;
+	public $client;
 
     public function __construct(ClientInterface $client)
     {
-    	$this->data = $client->get(Api::EXHANGE_RATE);
+    	$this->client = $client;
+    }
+
+    public function data() : array
+    {
+    	return $this->client->get(Api::EXHANGE_RATE);
     }
 
     public function rates() : array
     {
-    	return isset($this->data['rates']) ? $this->data['rates'] : [];
+    	$latestRates = $this->data();
+
+    	return isset($latestRates['rates']) ? $latestRates['rates'] : [];
     }
 }

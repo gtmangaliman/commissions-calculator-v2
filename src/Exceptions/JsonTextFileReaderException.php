@@ -7,5 +7,5 @@ use Exception;
 
 class JsonTextFileReaderException extends Exception
 {
-	protected $message = 'File should exist and must have a txt file type.';
+
 }

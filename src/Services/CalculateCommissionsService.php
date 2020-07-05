@@ -22,7 +22,7 @@ class CalculateCommissionsService
 		return number_format((float)$commission, 2);
     }
 
-    public function total(string $amount, string $currency, string $exchangeRate) : ?string
+    private function total(string $amount, string $currency, string $exchangeRate) : ?string
     {
     	if ($exchangeRate === '0') {
     		$total = $amount;

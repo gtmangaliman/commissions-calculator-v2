@@ -18,7 +18,7 @@ class JsonTextFileReaderService implements ReaderInterface
     	if ($this->withValidExtension($ext) && file_exists($file)) {
     		return file_get_contents($file);
     	} else {
-    		throw new JsonTextFileReaderException;
+    		throw new JsonTextFileReaderException('File should exist and must have a txt file type.');
     	}
     }
 }

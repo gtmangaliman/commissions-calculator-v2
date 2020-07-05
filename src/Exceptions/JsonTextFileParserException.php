@@ -7,6 +7,5 @@ use Exception;
 
 class JsonTextFileParserException extends Exception
 {
-	protected $message = 'Data to be parsed should not be empty.';
 
 }
